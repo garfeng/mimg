@@ -57,13 +57,14 @@ type Image struct {
 }
 
 func f2U(d float64) uint8 {
-	if d < 0.0 {
-		d = 0.0
+
+	v := int(d * 255.0)
+	if v > 255 {
+		v = 255
+	} else if v < 0 {
+		v = 0
 	}
-	if d > 1.0 {
-		d = 1.0
-	}
-	return uint8(d * 255.0)
+	return uint8(v)
 }
 
 func (i *Image) At(x, y int) color.Color {
@@ -109,8 +110,9 @@ func savePng(src image.Image, filename string) error {
 }
 
 const (
-	PNG  = 1
-	JPEG = 2
+	PNG    = 1
+	JPEG   = 2
+	OnePix = 1.0 / 255.0
 )
 
 func saveJpg(src image.Image, filename string) error {
